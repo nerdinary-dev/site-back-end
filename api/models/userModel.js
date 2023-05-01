@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
+  role: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Role",
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

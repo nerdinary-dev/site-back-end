@@ -3,9 +3,9 @@ const router = express.Router();
 const orderController = require("../controllers/orderController");
 
 // Order routes
-router.get("/", orderController.getAllOrders);
+router.get("/", orderController.getOrders);
 router.post("/", orderController.createOrder);
-router.get("/:id", orderController.getOrderById);
+router.get("/:id", orderController.getOrder);
 router.put("/:id", orderController.updateOrder);
 router.delete("/:id", orderController.deleteOrder);
 

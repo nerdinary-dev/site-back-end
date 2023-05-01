@@ -1,86 +1,43 @@
-const Product = require("../models/productModel");
+const Product = require("../models/productModel.js");
 
-// CREATE
-exports.createProduct = (req, res) => {
-  const { title, description, price, image } = req.body;
-
-  const newProduct = new Product({
-    title,
-    description,
-    price,
-    image,
-  });
-
-  newProduct
-    .save()
-    .then((product) => {
-      res.status(201).json(product);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+const getProducts = (req, res) => {
+  Product.find({})
+    .then((result) => res.status(200).json({ result }))
+    .catch((error) => res.status(500).json({ msg: error }));
 };
 
-// GET BY ID
-exports.getProductById = (req, res) => {
-  const id = req.params.id;
-
-  Product.findById(id)
-    .then((product) => {
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.json(product);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+const getProduct = (req, res) => {
+  Product.findOne({ _id: req.params.id })
+    .then((result) => res.status(200).json({ result }))
+    .catch(() => res.status(404).json({ msg: "Product not found" }));
 };
 
-// GET ALL
-exports.getAllProducts = (req, res) => {
-  Product.find()
-    .then((products) => {
-      res.json(products);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+const createProduct = (req, res) => {
+  console.log(req.body);
+  Product.create(req.body)
+    .then((result) => res.status(200).json({ result }))
+    .catch((error) => res.status(500).json({ msg: error }));
 };
 
-// UPDATE
-exports.updateProduct = (req, res) => {
-  const id = req.params.id;
-  const { title, description, price, image } = req.body;
-
-  Product.findByIdAndUpdate(
-    id,
-    { title, description, price, image },
-    { new: true }
-  )
-    .then((product) => {
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.json(product);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+const updateProduct = (req, res) => {
+  Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true,
+    runValidators: true,
+  })
+    .then((result) => res.status(200).json({ result }))
+    .catch((error) => res.status(404).json({ msg: "Product not found" }));
 };
 
-// DELETE
-exports.deleteProduct = (req, res) => {
-  const id = req.params.id;
+const deleteProduct = (req, res) => {
+  Product.findOneAndDelete({ _id: req.params.id })
+    .then((result) => res.status(200).json({ msg: "Product deleted", result }))
+    .catch((error) => res.status(404).json({ msg: "Product not found" }));
+};
 
-  Product.findByIdAndRemove(id)
-    .then((product) => {
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.json({ message: "Product deleted successfully" });
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+module.exports = {
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
 };

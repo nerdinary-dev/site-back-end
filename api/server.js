@@ -16,6 +16,7 @@ const orderRoutes = require("./routes/order");
 const transactionRoutes = require("./routes/transaction");
 const commentRoutes = require("./routes/comment");
 const cartRoutes = require("./routes/cart");
+const roleRoutes = require("./routes/role");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,6 +26,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/roles", roleRoutes);
 app.use("/api/carts", cartRoutes);
 
 // Server running status
